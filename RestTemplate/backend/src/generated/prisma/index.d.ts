@@ -2024,29 +2024,29 @@ export namespace Prisma {
   }
 
   export type PlateLogAvgAggregateOutputType = {
-    id: number | null
     paymentStatus: number | null
   }
 
   export type PlateLogSumAggregateOutputType = {
-    id: number | null
     paymentStatus: number | null
   }
 
   export type PlateLogMinAggregateOutputType = {
-    id: number | null
+    id: string | null
     plateNumber: string | null
     paymentStatus: number | null
     entryTimestamp: Date | null
     paymentTimestamp: Date | null
+    exitTimestamp: Date | null
   }
 
   export type PlateLogMaxAggregateOutputType = {
-    id: number | null
+    id: string | null
     plateNumber: string | null
     paymentStatus: number | null
     entryTimestamp: Date | null
     paymentTimestamp: Date | null
+    exitTimestamp: Date | null
   }
 
   export type PlateLogCountAggregateOutputType = {
@@ -2055,17 +2055,16 @@ export namespace Prisma {
     paymentStatus: number
     entryTimestamp: number
     paymentTimestamp: number
+    exitTimestamp: number
     _all: number
   }
 
 
   export type PlateLogAvgAggregateInputType = {
-    id?: true
     paymentStatus?: true
   }
 
   export type PlateLogSumAggregateInputType = {
-    id?: true
     paymentStatus?: true
   }
 
@@ -2075,6 +2074,7 @@ export namespace Prisma {
     paymentStatus?: true
     entryTimestamp?: true
     paymentTimestamp?: true
+    exitTimestamp?: true
   }
 
   export type PlateLogMaxAggregateInputType = {
@@ -2083,6 +2083,7 @@ export namespace Prisma {
     paymentStatus?: true
     entryTimestamp?: true
     paymentTimestamp?: true
+    exitTimestamp?: true
   }
 
   export type PlateLogCountAggregateInputType = {
@@ -2091,6 +2092,7 @@ export namespace Prisma {
     paymentStatus?: true
     entryTimestamp?: true
     paymentTimestamp?: true
+    exitTimestamp?: true
     _all?: true
   }
 
@@ -2181,11 +2183,12 @@ export namespace Prisma {
   }
 
   export type PlateLogGroupByOutputType = {
-    id: number
+    id: string
     plateNumber: string
     paymentStatus: number
     entryTimestamp: Date
     paymentTimestamp: Date | null
+    exitTimestamp: Date | null
     _count: PlateLogCountAggregateOutputType | null
     _avg: PlateLogAvgAggregateOutputType | null
     _sum: PlateLogSumAggregateOutputType | null
@@ -2213,6 +2216,7 @@ export namespace Prisma {
     paymentStatus?: boolean
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
+    exitTimestamp?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2221,6 +2225,7 @@ export namespace Prisma {
     paymentStatus?: boolean
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
+    exitTimestamp?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2229,6 +2234,7 @@ export namespace Prisma {
     paymentStatus?: boolean
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
+    exitTimestamp?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectScalar = {
@@ -2237,19 +2243,21 @@ export namespace Prisma {
     paymentStatus?: boolean
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
+    exitTimestamp?: boolean
   }
 
-  export type PlateLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plateNumber" | "paymentStatus" | "entryTimestamp" | "paymentTimestamp", ExtArgs["result"]["plateLog"]>
+  export type PlateLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plateNumber" | "paymentStatus" | "entryTimestamp" | "paymentTimestamp" | "exitTimestamp", ExtArgs["result"]["plateLog"]>
 
   export type $PlateLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PlateLog"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
-      id: number
+      id: string
       plateNumber: string
       paymentStatus: number
       entryTimestamp: Date
       paymentTimestamp: Date | null
+      exitTimestamp: Date | null
     }, ExtArgs["result"]["plateLog"]>
     composites: {}
   }
@@ -2673,11 +2681,12 @@ export namespace Prisma {
    * Fields of the PlateLog model
    */
   interface PlateLogFieldRefs {
-    readonly id: FieldRef<"PlateLog", 'Int'>
+    readonly id: FieldRef<"PlateLog", 'String'>
     readonly plateNumber: FieldRef<"PlateLog", 'String'>
     readonly paymentStatus: FieldRef<"PlateLog", 'Int'>
     readonly entryTimestamp: FieldRef<"PlateLog", 'DateTime'>
     readonly paymentTimestamp: FieldRef<"PlateLog", 'DateTime'>
+    readonly exitTimestamp: FieldRef<"PlateLog", 'DateTime'>
   }
     
 
@@ -3077,7 +3086,8 @@ export namespace Prisma {
     plateNumber: 'plateNumber',
     paymentStatus: 'paymentStatus',
     entryTimestamp: 'entryTimestamp',
-    paymentTimestamp: 'paymentTimestamp'
+    paymentTimestamp: 'paymentTimestamp',
+    exitTimestamp: 'exitTimestamp'
   };
 
   export type PlateLogScalarFieldEnum = (typeof PlateLogScalarFieldEnum)[keyof typeof PlateLogScalarFieldEnum]
@@ -3256,11 +3266,12 @@ export namespace Prisma {
     AND?: PlateLogWhereInput | PlateLogWhereInput[]
     OR?: PlateLogWhereInput[]
     NOT?: PlateLogWhereInput | PlateLogWhereInput[]
-    id?: IntFilter<"PlateLog"> | number
+    id?: StringFilter<"PlateLog"> | string
     plateNumber?: StringFilter<"PlateLog"> | string
     paymentStatus?: IntFilter<"PlateLog"> | number
     entryTimestamp?: DateTimeFilter<"PlateLog"> | Date | string
     paymentTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
+    exitTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
   }
 
   export type PlateLogOrderByWithRelationInput = {
@@ -3269,10 +3280,11 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrderInput | SortOrder
+    exitTimestamp?: SortOrderInput | SortOrder
   }
 
   export type PlateLogWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
+    id?: string
     AND?: PlateLogWhereInput | PlateLogWhereInput[]
     OR?: PlateLogWhereInput[]
     NOT?: PlateLogWhereInput | PlateLogWhereInput[]
@@ -3280,6 +3292,7 @@ export namespace Prisma {
     paymentStatus?: IntFilter<"PlateLog"> | number
     entryTimestamp?: DateTimeFilter<"PlateLog"> | Date | string
     paymentTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
+    exitTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
   }, "id">
 
   export type PlateLogOrderByWithAggregationInput = {
@@ -3288,6 +3301,7 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrderInput | SortOrder
+    exitTimestamp?: SortOrderInput | SortOrder
     _count?: PlateLogCountOrderByAggregateInput
     _avg?: PlateLogAvgOrderByAggregateInput
     _max?: PlateLogMaxOrderByAggregateInput
@@ -3299,11 +3313,12 @@ export namespace Prisma {
     AND?: PlateLogScalarWhereWithAggregatesInput | PlateLogScalarWhereWithAggregatesInput[]
     OR?: PlateLogScalarWhereWithAggregatesInput[]
     NOT?: PlateLogScalarWhereWithAggregatesInput | PlateLogScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"PlateLog"> | number
+    id?: StringWithAggregatesFilter<"PlateLog"> | string
     plateNumber?: StringWithAggregatesFilter<"PlateLog"> | string
     paymentStatus?: IntWithAggregatesFilter<"PlateLog"> | number
     entryTimestamp?: DateTimeWithAggregatesFilter<"PlateLog"> | Date | string
     paymentTimestamp?: DateTimeNullableWithAggregatesFilter<"PlateLog"> | Date | string | null
+    exitTimestamp?: DateTimeNullableWithAggregatesFilter<"PlateLog"> | Date | string | null
   }
 
   export type UserCreateInput = {
@@ -3384,56 +3399,66 @@ export namespace Prisma {
   }
 
   export type PlateLogCreateInput = {
+    id?: string
     plateNumber: string
     paymentStatus: number
     entryTimestamp: Date | string
     paymentTimestamp?: Date | string | null
+    exitTimestamp?: Date | string | null
   }
 
   export type PlateLogUncheckedCreateInput = {
-    id?: number
+    id?: string
     plateNumber: string
     paymentStatus: number
     entryTimestamp: Date | string
     paymentTimestamp?: Date | string | null
+    exitTimestamp?: Date | string | null
   }
 
   export type PlateLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     plateNumber?: StringFieldUpdateOperationsInput | string
     paymentStatus?: IntFieldUpdateOperationsInput | number
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PlateLogUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     plateNumber?: StringFieldUpdateOperationsInput | string
     paymentStatus?: IntFieldUpdateOperationsInput | number
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PlateLogCreateManyInput = {
-    id?: number
+    id?: string
     plateNumber: string
     paymentStatus: number
     entryTimestamp: Date | string
     paymentTimestamp?: Date | string | null
+    exitTimestamp?: Date | string | null
   }
 
   export type PlateLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     plateNumber?: StringFieldUpdateOperationsInput | string
     paymentStatus?: IntFieldUpdateOperationsInput | number
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PlateLogUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     plateNumber?: StringFieldUpdateOperationsInput | string
     paymentStatus?: IntFieldUpdateOperationsInput | number
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3577,10 +3602,10 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrder
+    exitTimestamp?: SortOrder
   }
 
   export type PlateLogAvgOrderByAggregateInput = {
-    id?: SortOrder
     paymentStatus?: SortOrder
   }
 
@@ -3590,6 +3615,7 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrder
+    exitTimestamp?: SortOrder
   }
 
   export type PlateLogMinOrderByAggregateInput = {
@@ -3598,10 +3624,10 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrder
+    exitTimestamp?: SortOrder
   }
 
   export type PlateLogSumOrderByAggregateInput = {
-    id?: SortOrder
     paymentStatus?: SortOrder
   }
 
