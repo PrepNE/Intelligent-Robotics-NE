@@ -77,16 +77,19 @@ while True:
                                 if (most_common != last_saved_plate or
                                     (current_time - last_entry_time) > entry_cooldown):
                                     # Log plate entry to database
-                                    db_operations.log_plate_entry(most_common)
-                                    print(f"[SAVED] {most_common} logged to database.")
-                                    if arduino:
-                                        arduino.write(b'1')
-                                        print("[GATE] Opening gate (sent '1')")
-                                        time.sleep(5)
-                                        arduino.write(b'0')
-                                        print("[GATE] Closing gate (sent '0')")
-                                    last_saved_plate = most_common
-                                    last_entry_time = current_time
+                                    entry_result = db_operations.log_plate_entry(most_common)
+                                    if entry_result is not None:
+                                        print(f"[SAVED] {most_common} logged to database.")
+                                        if arduino:
+                                            arduino.write(b'1')
+                                            print("[GATE] Opening gate (sent '1')")
+                                            time.sleep(5)
+                                            arduino.write(b'0')
+                                            print("[GATE] Closing gate (sent '0')")
+                                        last_saved_plate = most_common
+                                        last_entry_time = current_time
+                                    else:
+                                        print(f"[SKIPPED] {most_common} already in parking lot. Gate not opened.")
                                 else:
                                     print("[SKIPPED] Duplicate within 5 min window.")
                                 plate_buffer.clear()
