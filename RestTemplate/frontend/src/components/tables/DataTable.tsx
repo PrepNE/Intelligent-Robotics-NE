@@ -15,7 +15,7 @@ interface EditModalProps<T> {
     rules?: any[];
     placeholder?: string;
   }[];
-  onSubmit: (updatedItem: T) => Promise<void>;
+  onSubmit?: (updatedItem: T) => Promise<void>;
 }
 
 interface DeleteModalProps {
@@ -27,8 +27,8 @@ interface DeleteModalProps {
 interface DataTableProps<T> {
   data: T[];
   searchQuery: string;
-  onDelete: (id: string) => Promise<void>;
-  onEdit: (item: T) => Promise<void>;
+  onDelete?: (id: string) => Promise<void>;
+  onEdit?: (item: T) => Promise<void>;
   columns: (
     selectedKey: string | null,
     handleEdit: (item: T) => void,
@@ -36,10 +36,10 @@ interface DataTableProps<T> {
     handleCheckBoxChange: (key: string, item: T) => void
   ) => any[];
   rowKey: keyof T;
-  EditModalComponent: React.FC<EditModalProps<T>>;
-  DeleteModalComponent: React.FC<DeleteModalProps>;
-  modalTitle: string;
-  editFields: EditModalProps<T>["fields"];
+  EditModalComponent?: React.FC<EditModalProps<T>>;
+  DeleteModalComponent?: React.FC<DeleteModalProps>;
+  modalTitle?: string;
+  editFields?: EditModalProps<T>["fields"];
 }
 
 const DataTable = <T extends { id: string }>({
@@ -92,7 +92,7 @@ const DataTable = <T extends { id: string }>({
   };
 
   const confirmDelete = async () => {
-    if (currentItem?.id) {
+    if (currentItem?.id && onDelete) {
       await onDelete(currentItem.id);
       setDeleteModalVisible(false);
       setSelectedKey(null);
@@ -127,22 +127,24 @@ const DataTable = <T extends { id: string }>({
         onChange={handleTableChange}
       />
 
-      {currentItem && (
+      {currentItem && EditModalComponent && (
         <EditModalComponent
           visible={isEditModalVisible}
           onClose={() => setEditModalVisible(false)}
           item={currentItem}
-          title={modalTitle}
-          fields={editFields}
+          title={modalTitle ?? ''}
+          fields={editFields ?? []}
           onSubmit={onEdit}
         />
       )}
 
-      <DeleteModalComponent
+      { DeleteModalComponent && (
+        <DeleteModalComponent
         visible={isDeleteModalVisible}
         onConfirm={confirmDelete}
         onCancel={() => setDeleteModalVisible(false)}
       />
+      )}
     </div>
   );
 };

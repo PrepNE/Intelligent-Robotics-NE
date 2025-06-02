@@ -5,7 +5,8 @@ import {
   HomeOutlined,
   LogoutOutlined,
   CaretDownOutlined,
-  CaretRightOutlined
+  CaretRightOutlined,
+  LoginOutlined
 } from "@ant-design/icons";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -38,6 +39,12 @@ const Sidebar: React.FC = () => {
       name: "Overview",
       path: "/dashboard",
       icon: <HomeOutlined />,
+    },
+     {
+      id: 2,
+      name: "Entries",
+      path: "/dashboard/logs",
+      icon: <LoginOutlined />,
     }
   ];
 

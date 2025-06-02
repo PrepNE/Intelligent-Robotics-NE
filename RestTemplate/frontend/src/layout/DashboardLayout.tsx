@@ -73,7 +73,7 @@ const DashboardLayout = () => {
             </div>
           </div>
         </header>
-        <div className="pt-12 px-4 md:px-8">
+        <div className="pt-12 px-4 md:px-8 overflow-y-auto flex-1 mb-4">
           <Outlet />
         </div>
       </div>

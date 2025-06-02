@@ -3,7 +3,6 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import DashboardLayout from "./layout/DashboardLayout";
 import Overview from "./pages/dashboard/Overview";
-import Slots from "./pages/dashboard/Slots";
 import NotFound from "./pages/404";
 import { RecoilRoot } from "recoil";
 import useAuth, { AuthProvider } from "./hooks/useAuth";
@@ -11,6 +10,7 @@ import PageLoader from "./components/shared/PageLoader";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/Home";
 import PublicRoute from "./routes/PublicRoute";
+import Logs from "./pages/dashboard/Logs";
 
 function AppRoutes() {
   const { user, initialLoading } = useAuth();
@@ -56,7 +56,7 @@ function AppRoutes() {
         }
       >
         <Route index element={<Overview />} />
-        <Route path="slots" element={<Slots />} />
+        <Route path="logs" element={<Logs />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

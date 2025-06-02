@@ -14,7 +14,7 @@ import db_operations
 db_operations.initialize_db()
 
 # Load YOLOv8 model (same model as entry)
-model = YOLO(r'C://Users//hp//Downloads//windows-parking-management-system//windows-parking-management-system//best.pt')
+model = YOLO('C://Users//hp//Desktop//NE_2025//Embedded//Intelligent Robotics & Embedded//best.pt')
 
 # ===== Auto-detect Arduino Serial Port =====
 def detect_arduino_port():
@@ -90,7 +90,7 @@ while True:
 
                                 if is_payment_complete(most_common):
                                     print(f"[ACCESS GRANTED] Payment complete for {most_common}")
-                                    # Record exit time in database with normal status
+
                                     db_operations.log_plate_exit(most_common, "NORMAL")
                                     if arduino:
                                         arduino.write(b'1')  # Open gate
@@ -100,7 +100,7 @@ while True:
                                         print("[GATE] Closing gate (sent '0')")
                                 else:
                                     print(f"[ACCESS DENIED] Payment NOT complete for {most_common}")
-                                    # Record incident in database
+
                                     db_operations.log_plate_exit(most_common, "DENIED")
                                     if arduino:
                                         arduino.write(b'2')  # Trigger warning buzzer
