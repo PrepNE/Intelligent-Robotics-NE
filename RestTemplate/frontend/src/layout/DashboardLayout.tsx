@@ -13,6 +13,7 @@ const DashboardLayout = () => {
   const { Text } = Typography;
   const location = useLocation();
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  
 
   const toggleSidebar = () => {
     setSidebarOpen(true);

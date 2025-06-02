@@ -2025,10 +2025,12 @@ export namespace Prisma {
 
   export type PlateLogAvgAggregateOutputType = {
     paymentStatus: number | null
+    amountCharged: Decimal | null
   }
 
   export type PlateLogSumAggregateOutputType = {
     paymentStatus: number | null
+    amountCharged: Decimal | null
   }
 
   export type PlateLogMinAggregateOutputType = {
@@ -2039,6 +2041,7 @@ export namespace Prisma {
     paymentTimestamp: Date | null
     exitTimestamp: Date | null
     exitStatus: string | null
+    amountCharged: Decimal | null
   }
 
   export type PlateLogMaxAggregateOutputType = {
@@ -2049,6 +2052,7 @@ export namespace Prisma {
     paymentTimestamp: Date | null
     exitTimestamp: Date | null
     exitStatus: string | null
+    amountCharged: Decimal | null
   }
 
   export type PlateLogCountAggregateOutputType = {
@@ -2059,16 +2063,19 @@ export namespace Prisma {
     paymentTimestamp: number
     exitTimestamp: number
     exitStatus: number
+    amountCharged: number
     _all: number
   }
 
 
   export type PlateLogAvgAggregateInputType = {
     paymentStatus?: true
+    amountCharged?: true
   }
 
   export type PlateLogSumAggregateInputType = {
     paymentStatus?: true
+    amountCharged?: true
   }
 
   export type PlateLogMinAggregateInputType = {
@@ -2079,6 +2086,7 @@ export namespace Prisma {
     paymentTimestamp?: true
     exitTimestamp?: true
     exitStatus?: true
+    amountCharged?: true
   }
 
   export type PlateLogMaxAggregateInputType = {
@@ -2089,6 +2097,7 @@ export namespace Prisma {
     paymentTimestamp?: true
     exitTimestamp?: true
     exitStatus?: true
+    amountCharged?: true
   }
 
   export type PlateLogCountAggregateInputType = {
@@ -2099,6 +2108,7 @@ export namespace Prisma {
     paymentTimestamp?: true
     exitTimestamp?: true
     exitStatus?: true
+    amountCharged?: true
     _all?: true
   }
 
@@ -2196,6 +2206,7 @@ export namespace Prisma {
     paymentTimestamp: Date | null
     exitTimestamp: Date | null
     exitStatus: string | null
+    amountCharged: Decimal | null
     _count: PlateLogCountAggregateOutputType | null
     _avg: PlateLogAvgAggregateOutputType | null
     _sum: PlateLogSumAggregateOutputType | null
@@ -2225,6 +2236,7 @@ export namespace Prisma {
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
     exitStatus?: boolean
+    amountCharged?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2235,6 +2247,7 @@ export namespace Prisma {
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
     exitStatus?: boolean
+    amountCharged?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2245,6 +2258,7 @@ export namespace Prisma {
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
     exitStatus?: boolean
+    amountCharged?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectScalar = {
@@ -2255,9 +2269,10 @@ export namespace Prisma {
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
     exitStatus?: boolean
+    amountCharged?: boolean
   }
 
-  export type PlateLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plateNumber" | "paymentStatus" | "entryTimestamp" | "paymentTimestamp" | "exitTimestamp" | "exitStatus", ExtArgs["result"]["plateLog"]>
+  export type PlateLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plateNumber" | "paymentStatus" | "entryTimestamp" | "paymentTimestamp" | "exitTimestamp" | "exitStatus" | "amountCharged", ExtArgs["result"]["plateLog"]>
 
   export type $PlateLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PlateLog"
@@ -2270,6 +2285,7 @@ export namespace Prisma {
       paymentTimestamp: Date | null
       exitTimestamp: Date | null
       exitStatus: string | null
+      amountCharged: Prisma.Decimal | null
     }, ExtArgs["result"]["plateLog"]>
     composites: {}
   }
@@ -2700,6 +2716,7 @@ export namespace Prisma {
     readonly paymentTimestamp: FieldRef<"PlateLog", 'DateTime'>
     readonly exitTimestamp: FieldRef<"PlateLog", 'DateTime'>
     readonly exitStatus: FieldRef<"PlateLog", 'String'>
+    readonly amountCharged: FieldRef<"PlateLog", 'Decimal'>
   }
     
 
@@ -3101,7 +3118,8 @@ export namespace Prisma {
     entryTimestamp: 'entryTimestamp',
     paymentTimestamp: 'paymentTimestamp',
     exitTimestamp: 'exitTimestamp',
-    exitStatus: 'exitStatus'
+    exitStatus: 'exitStatus',
+    amountCharged: 'amountCharged'
   };
 
   export type PlateLogScalarFieldEnum = (typeof PlateLogScalarFieldEnum)[keyof typeof PlateLogScalarFieldEnum]
@@ -3189,6 +3207,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -3287,6 +3319,7 @@ export namespace Prisma {
     paymentTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
     exitTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
     exitStatus?: StringNullableFilter<"PlateLog"> | string | null
+    amountCharged?: DecimalNullableFilter<"PlateLog"> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type PlateLogOrderByWithRelationInput = {
@@ -3297,6 +3330,7 @@ export namespace Prisma {
     paymentTimestamp?: SortOrderInput | SortOrder
     exitTimestamp?: SortOrderInput | SortOrder
     exitStatus?: SortOrderInput | SortOrder
+    amountCharged?: SortOrderInput | SortOrder
   }
 
   export type PlateLogWhereUniqueInput = Prisma.AtLeast<{
@@ -3310,6 +3344,7 @@ export namespace Prisma {
     paymentTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
     exitTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
     exitStatus?: StringNullableFilter<"PlateLog"> | string | null
+    amountCharged?: DecimalNullableFilter<"PlateLog"> | Decimal | DecimalJsLike | number | string | null
   }, "id">
 
   export type PlateLogOrderByWithAggregationInput = {
@@ -3320,6 +3355,7 @@ export namespace Prisma {
     paymentTimestamp?: SortOrderInput | SortOrder
     exitTimestamp?: SortOrderInput | SortOrder
     exitStatus?: SortOrderInput | SortOrder
+    amountCharged?: SortOrderInput | SortOrder
     _count?: PlateLogCountOrderByAggregateInput
     _avg?: PlateLogAvgOrderByAggregateInput
     _max?: PlateLogMaxOrderByAggregateInput
@@ -3338,6 +3374,7 @@ export namespace Prisma {
     paymentTimestamp?: DateTimeNullableWithAggregatesFilter<"PlateLog"> | Date | string | null
     exitTimestamp?: DateTimeNullableWithAggregatesFilter<"PlateLog"> | Date | string | null
     exitStatus?: StringNullableWithAggregatesFilter<"PlateLog"> | string | null
+    amountCharged?: DecimalNullableWithAggregatesFilter<"PlateLog"> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type UserCreateInput = {
@@ -3425,6 +3462,7 @@ export namespace Prisma {
     paymentTimestamp?: Date | string | null
     exitTimestamp?: Date | string | null
     exitStatus?: string | null
+    amountCharged?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type PlateLogUncheckedCreateInput = {
@@ -3435,6 +3473,7 @@ export namespace Prisma {
     paymentTimestamp?: Date | string | null
     exitTimestamp?: Date | string | null
     exitStatus?: string | null
+    amountCharged?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type PlateLogUpdateInput = {
@@ -3445,6 +3484,7 @@ export namespace Prisma {
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCharged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type PlateLogUncheckedUpdateInput = {
@@ -3455,6 +3495,7 @@ export namespace Prisma {
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCharged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type PlateLogCreateManyInput = {
@@ -3465,6 +3506,7 @@ export namespace Prisma {
     paymentTimestamp?: Date | string | null
     exitTimestamp?: Date | string | null
     exitStatus?: string | null
+    amountCharged?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type PlateLogUpdateManyMutationInput = {
@@ -3475,6 +3517,7 @@ export namespace Prisma {
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCharged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type PlateLogUncheckedUpdateManyInput = {
@@ -3485,6 +3528,7 @@ export namespace Prisma {
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCharged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3632,6 +3676,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -3645,10 +3700,12 @@ export namespace Prisma {
     paymentTimestamp?: SortOrder
     exitTimestamp?: SortOrder
     exitStatus?: SortOrder
+    amountCharged?: SortOrder
   }
 
   export type PlateLogAvgOrderByAggregateInput = {
     paymentStatus?: SortOrder
+    amountCharged?: SortOrder
   }
 
   export type PlateLogMaxOrderByAggregateInput = {
@@ -3659,6 +3716,7 @@ export namespace Prisma {
     paymentTimestamp?: SortOrder
     exitTimestamp?: SortOrder
     exitStatus?: SortOrder
+    amountCharged?: SortOrder
   }
 
   export type PlateLogMinOrderByAggregateInput = {
@@ -3669,10 +3727,12 @@ export namespace Prisma {
     paymentTimestamp?: SortOrder
     exitTimestamp?: SortOrder
     exitStatus?: SortOrder
+    amountCharged?: SortOrder
   }
 
   export type PlateLogSumOrderByAggregateInput = {
     paymentStatus?: SortOrder
+    amountCharged?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -3723,6 +3783,22 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -3749,6 +3825,14 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3860,6 +3944,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -3927,6 +4022,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
 

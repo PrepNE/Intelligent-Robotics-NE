@@ -33,6 +33,7 @@ model PlateLog {
   paymentTimestamp DateTime? @map("payment_timestamp")
   exitTimestamp    DateTime? @map("exit_timestamp")
   exitStatus       String?   @map("exit_status")
+  amountCharged    Decimal?  @map("amount_charged") @db.Decimal(10, 2)
 
   @@map("plates_log")
 }

@@ -18,9 +18,9 @@ def get_timestamp():
 def read_last_unpaid_entry(plate):
     """Read the last unpaid entry (Payment Status = 0) for a given plate from database."""
     return db_operations.read_last_unpaid_entry(plate)
-def update_payment_status(plate, entry_timestamp):
-    """Update the Payment Status to 1 and log the payment timestamp."""
-    return db_operations.update_payment_status(plate, entry_timestamp)
+def update_payment_status(plate, entry_timestamp, amount_charged=None):
+    """Update the Payment Status to 1, log the payment timestamp, and store the amount charged."""
+    return db_operations.update_payment_status(plate, entry_timestamp, amount_charged)
 try:
     print_boxed_message("Python Parking System Ready", "=")
     print(f"[{get_timestamp()}] Waiting for Arduino data...\n")
@@ -53,11 +53,11 @@ try:
                     current_time = datetime.now()
                     time_diff = current_time - entry_time
                     hours = time_diff.total_seconds() / 3600  # Convert to hours
-                # Calculate charge (100 units per 30 min after first 30 min)
+                # Calculate charge (8 units per minute = 500 RWF per hour)
                 minutes = hours * 60
-                charge = 0
-                if minutes > 30:
-                    charge = ((minutes - 30 + 29) // 30) * 100
+                # Ensure at least 1 minute is charged
+                minutes_spent = max(1, int(minutes))
+                charge = minutes_spent * 8
                 if charge > cash:
                     print_boxed_message("Error: Charge Exceeds Balance", "!")
                     print(f"[{get_timestamp()}] Charge ({charge} units) exceeds balance ({cash} units).\n")
@@ -73,7 +73,7 @@ try:
                 response = ser.readline().decode('utf-8').strip()
                 if response == "DONE":
                     if last_entry:
-                        payment_time = update_payment_status(plate, last_entry['Timestamp'])
+                        payment_time = update_payment_status(plate, last_entry['Timestamp'], charge)
                         if payment_time:
                             print_boxed_message("Payment Processed", "-")
                             print(f"[{get_timestamp()}] Payment Details:")

@@ -10,7 +10,8 @@ export interface IParkingLog {
   entryTimestamp: string;        
   paymentTimestamp?: string;     
   exitTimestamp?: string;        
-  exitStatus?: string;      
+  exitStatus?: string;
+  amountCharged?: string;      
 }
 
 

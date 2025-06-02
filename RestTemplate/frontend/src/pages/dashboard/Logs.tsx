@@ -29,6 +29,8 @@ const Logs = () => {
 
   const { logs, isLoading } = useParkingLogs();
 
+  console.log("logs: ", logs)
+
   const handleSearchQueryChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -190,6 +192,19 @@ const Logs = () => {
             {calculateDuration(record.entryTimestamp, record.exitTimestamp)}
           </span>
         ),
+      },
+      {
+        title: "Amount",
+        key: "amountCharged",
+        dataIndex: "amountCharged",
+        width: 120,
+        render: (amountCharged: number | string | undefined) => (
+          <span className="font-mono font-semibold text-gray-800">
+            {amountCharged !== undefined && amountCharged !== null
+              ? `RWF${Number(amountCharged).toLocaleString(undefined, { minimumFractionDigits: 2 })}`
+              : "-"}
+          </span>
+        )
       },
       {
         title: "Payment Time",

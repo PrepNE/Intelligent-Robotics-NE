@@ -52,7 +52,8 @@ def initialize_db():
                     entry_timestamp TIMESTAMP NOT NULL,
                     payment_timestamp TIMESTAMP,
                     exit_timestamp TIMESTAMP,
-                    exit_status VARCHAR(100)
+                    exit_status VARCHAR(100),
+                    amount_charged NUMERIC(10, 2)
                 )
             """)
             conn.commit()
@@ -122,8 +123,8 @@ def read_last_unpaid_entry(plate):
     finally:
         conn.close()
 
-def update_payment_status(plate, entry_timestamp):
-    """Update the Payment Status to 1 and log the payment timestamp."""
+def update_payment_status(plate, entry_timestamp, amount_charged=None):
+    """Update the Payment Status to 1, log the payment timestamp, and store the amount charged."""
     conn = connect_to_db()
     if conn is None:
         return None
@@ -131,11 +132,18 @@ def update_payment_status(plate, entry_timestamp):
     try:
         with conn.cursor() as cursor:
             payment_time = get_timestamp()
-            cursor.execute("""
-                UPDATE plates_log
-                SET payment_status = 1, payment_timestamp = %s
-                WHERE plate_number = %s AND entry_timestamp::text = %s AND payment_status = 0
-            """, (payment_time, plate, entry_timestamp))
+            if amount_charged is not None:
+                cursor.execute("""
+                    UPDATE plates_log
+                    SET payment_status = 1, payment_timestamp = %s, amount_charged = %s
+                    WHERE plate_number = %s AND entry_timestamp::text = %s AND payment_status = 0
+                """, (payment_time, amount_charged, plate, entry_timestamp))
+            else:
+                cursor.execute("""
+                    UPDATE plates_log
+                    SET payment_status = 1, payment_timestamp = %s
+                    WHERE plate_number = %s AND entry_timestamp::text = %s AND payment_status = 0
+                """, (payment_time, plate, entry_timestamp))
 
             if cursor.rowcount == 0:
                 print(f"[{get_timestamp()}] No matching unpaid entry found for plate {plate}.")
@@ -202,8 +210,10 @@ def process_payment(plate, balance, ser):
             entry_time_str = result[0].strftime('%Y-%m-%d %H:%M:%S')
             entry_time = result[0]
             exit_time = datetime.now()
-            minutes_spent = int((exit_time - entry_time).total_seconds() / 60) + 1
-            amount_due = minutes_spent * 5  # RATE_PER_MINUTE = 5
+            # Calculate minutes spent, with a minimum of 1 minute
+            minutes_spent = max(1, int((exit_time - entry_time).total_seconds() / 60))
+            # Use a rate of 8 units per minute (500 RWF per hour / 60 minutes)
+            amount_due = minutes_spent * 8  # RATE_PER_MINUTE = 8
 
             if balance < amount_due:
                 print("[PAYMENT] Insufficient balance")
@@ -238,8 +248,8 @@ def process_payment(plate, balance, ser):
                         print(f"[ARDUINO] {confirm}")
                         if "DONE" in confirm:
                             print("[ARDUINO] Write confirmed")
-                            # Update payment status
-                            update_payment_status(plate, entry_time_str)
+                            # Update payment status and store amount charged
+                            update_payment_status(plate, entry_time_str, amount_due)
                             return True
 
                     # Add timeout condition
@@ -279,6 +289,7 @@ def mark_payment_success(plate_number):
                 return False
 
             entry_timestamp = result[0]
+            # Since this is a manual payment success marking, we don't have amount information
             payment_time = update_payment_status(plate_number, entry_timestamp)
 
             if payment_time:
@@ -361,7 +372,7 @@ def log_plate_exit(plate_number, exit_status=None):
             else:
                 # For normal exits, get the most recent paid entry without an exit timestamp
                 cursor.execute("""
-                    SELECT id
+                    SELECT id, amount_charged
                     FROM plates_log
                     WHERE plate_number = %s AND payment_status = 1 AND exit_timestamp IS NULL
                     ORDER BY payment_timestamp DESC
@@ -375,6 +386,9 @@ def log_plate_exit(plate_number, exit_status=None):
 
             entry_id = result[0]
             exit_time = get_timestamp()
+
+            # Get amount charged if available (for normal exits)
+            amount_charged = result[1] if exit_status != "DENIED" and len(result) > 1 else None
 
             # Update the exit timestamp and status
             if exit_status == "DENIED":
@@ -392,7 +406,10 @@ def log_plate_exit(plate_number, exit_status=None):
                     SET exit_timestamp = %s, exit_status = %s
                     WHERE id = %s
                 """, (exit_time, exit_status, entry_id))
-                print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}")
+                if amount_charged is not None:
+                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}, amount charged: {amount_charged}")
+                else:
+                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}")
             else:
                 # For exits without status, just update exit_timestamp
                 cursor.execute("""
@@ -400,7 +417,10 @@ def log_plate_exit(plate_number, exit_status=None):
                     SET exit_timestamp = %s
                     WHERE id = %s
                 """, (exit_time, entry_id))
-                print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}")
+                if amount_charged is not None:
+                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}, amount charged: {amount_charged}")
+                else:
+                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}")
 
             conn.commit()
             return True
