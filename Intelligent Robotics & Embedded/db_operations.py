@@ -67,21 +67,35 @@ def initialize_db():
         conn.close()
 
 def log_plate_entry(plate, payment_status=0):
-    """Log a new plate entry to the database."""
+    """Log a new plate entry to the database if it hasn't already entered and not exited."""
     conn = connect_to_db()
     if conn is None:
         return False
 
     try:
         with conn.cursor() as cursor:
+            # Check for existing entry with no exit timestamp
+            cursor.execute("""
+                SELECT id FROM plates_log
+                WHERE plate_number = %s AND exit_timestamp IS NULL
+                ORDER BY entry_timestamp DESC
+                LIMIT 1
+            """, (plate,))
+            result = cursor.fetchone()
+
+            if result is not None:
+                print(f"[SKIP] Plate {plate} already logged without exit. Skipping entry.")
+                return None
+
+            # No existing un-exited entry, proceed to log new entry
             timestamp = get_timestamp()
-            plate_id = str(uuid.uuid4())  # Convert UUID to string
+            plate_id = str(uuid.uuid4())
             cursor.execute("""
                 INSERT INTO plates_log (id, plate_number, payment_status, entry_timestamp)
                 VALUES (%s, %s, %s, %s)
             """, (plate_id, plate, payment_status, timestamp))
             conn.commit()
-            print(f"[{get_timestamp()}] Plate {plate} logged to database.")
+            print(f"[ENTRY] Plate {plate} logged at {timestamp}.")
             return timestamp
     except Exception as e:
         print_boxed_message("Database Insert Error", "!")
@@ -361,6 +375,19 @@ def log_plate_exit(plate_number, exit_status=None):
         with conn.cursor() as cursor:
             # For access denied (unpaid), we need to record the incident
             if exit_status == "DENIED":
+                # Check if there's already a DENIED record for this plate
+                cursor.execute("""
+                    SELECT id
+                    FROM plates_log
+                    WHERE plate_number = %s AND exit_timestamp IS NULL AND exit_status = 'DENIED'
+                    ORDER BY entry_timestamp DESC
+                    LIMIT 1
+                """, (plate_number,))
+
+                if cursor.fetchone() is not None:
+                    print(f"[SKIP] Plate {plate_number} already has a DENIED exit status. Skipping update.")
+                    return True
+
                 # Get the most recent entry without an exit timestamp, regardless of payment status
                 cursor.execute("""
                     SELECT id
@@ -370,6 +397,19 @@ def log_plate_exit(plate_number, exit_status=None):
                     LIMIT 1
                 """, (plate_number,))
             else:
+                # Check if there's already a NORMAL exit record for this plate
+                cursor.execute("""
+                    SELECT id
+                    FROM plates_log
+                    WHERE plate_number = %s AND exit_timestamp IS NOT NULL AND exit_status = 'NORMAL'
+                    ORDER BY exit_timestamp DESC
+                    LIMIT 1
+                """, (plate_number,))
+
+                if cursor.fetchone() is not None:
+                    print(f"[SKIP] Plate {plate_number} already has a NORMAL exit record. Skipping update.")
+                    return True
+
                 # For normal exits, get the most recent paid entry without an exit timestamp
                 cursor.execute("""
                     SELECT id, amount_charged
