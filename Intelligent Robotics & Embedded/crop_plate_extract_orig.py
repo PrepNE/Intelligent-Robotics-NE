@@ -5,7 +5,7 @@ import os
 import time
 
 # Load YOLOv8 model
-model = YOLO('C://Users//hp//Downloads//windows-parking-management-system//windows-parking-management-system//best.pt')  # Absolute path to your best weights
+model = YOLO('C://Users//hp//Desktop//NE_2025//Embedded//Intelligent Robotics & Embedded//best.pt')# Absolute path to your best weights
 
 # Create folder to save cropped plates
 save_dir = 'plates'

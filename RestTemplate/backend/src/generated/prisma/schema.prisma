@@ -32,6 +32,7 @@ model PlateLog {
   entryTimestamp   DateTime  @map("entry_timestamp")
   paymentTimestamp DateTime? @map("payment_timestamp")
   exitTimestamp    DateTime? @map("exit_timestamp")
+  exitStatus       String?   @map("exit_status")
 
   @@map("plates_log")
 }

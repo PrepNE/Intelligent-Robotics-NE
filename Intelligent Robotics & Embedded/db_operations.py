@@ -51,7 +51,8 @@ def initialize_db():
                     payment_status INTEGER DEFAULT 0,
                     entry_timestamp TIMESTAMP NOT NULL,
                     payment_timestamp TIMESTAMP,
-                    exit_timestamp TIMESTAMP
+                    exit_timestamp TIMESTAMP,
+                    exit_status VARCHAR(100)
                 )
             """)
             conn.commit()
@@ -292,8 +293,8 @@ def mark_payment_success(plate_number):
     finally:
         conn.close()
 
-def log_plate_exit(plate_number):
-    """Record the exit time for a plate with a paid entry."""
+def update_exit_status(plate_number, status):
+    """Update the exit status for a plate."""
     conn = connect_to_db()
     if conn is None:
         return False
@@ -317,15 +318,91 @@ def log_plate_exit(plate_number):
             entry_id = result[0]
             exit_time = get_timestamp()
 
-            # Update the exit timestamp
+            # Update the exit timestamp and status
             cursor.execute("""
                 UPDATE plates_log
-                SET exit_timestamp = %s
+                SET exit_timestamp = %s, exit_status = %s
                 WHERE id = %s
-            """, (exit_time, entry_id))
+            """, (exit_time, status, entry_id))
 
             conn.commit()
-            print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}")
+            print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {status}")
+            return True
+    except Exception as e:
+        print_boxed_message("Database Exit Record Error", "!")
+        print(f"[{get_timestamp()}] Error recording exit status: {e}")
+        return False
+    finally:
+        conn.close()
+
+def log_plate_exit(plate_number, exit_status=None):
+    """Record the exit time for a plate.
+
+    Args:
+        plate_number: The license plate number
+        exit_status: Optional status to record any incidents during exit
+    """
+    conn = connect_to_db()
+    if conn is None:
+        return False
+
+    try:
+        with conn.cursor() as cursor:
+            # For access denied (unpaid), we need to record the incident
+            if exit_status == "DENIED":
+                # Get the most recent entry without an exit timestamp, regardless of payment status
+                cursor.execute("""
+                    SELECT id
+                    FROM plates_log
+                    WHERE plate_number = %s AND exit_timestamp IS NULL
+                    ORDER BY entry_timestamp DESC
+                    LIMIT 1
+                """, (plate_number,))
+            else:
+                # For normal exits, get the most recent paid entry without an exit timestamp
+                cursor.execute("""
+                    SELECT id
+                    FROM plates_log
+                    WHERE plate_number = %s AND payment_status = 1 AND exit_timestamp IS NULL
+                    ORDER BY payment_timestamp DESC
+                    LIMIT 1
+                """, (plate_number,))
+
+            result = cursor.fetchone()
+            if result is None:
+                print(f"[INFO] No suitable entry without exit time found for {plate_number}")
+                return False
+
+            entry_id = result[0]
+            exit_time = get_timestamp()
+
+            # Update the exit timestamp and status
+            if exit_status == "DENIED":
+                # For denied exits, only update the exit_status without setting exit_timestamp
+                cursor.execute("""
+                    UPDATE plates_log
+                    SET exit_status = %s
+                    WHERE id = %s
+                """, (exit_status, entry_id))
+                print(f"[EXIT] Recorded incident for plate {plate_number} with status: {exit_status}")
+            elif exit_status:
+                # For normal exits with status, update both exit_timestamp and exit_status
+                cursor.execute("""
+                    UPDATE plates_log
+                    SET exit_timestamp = %s, exit_status = %s
+                    WHERE id = %s
+                """, (exit_time, exit_status, entry_id))
+                print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}")
+            else:
+                # For exits without status, just update exit_timestamp
+                cursor.execute("""
+                    UPDATE plates_log
+                    SET exit_timestamp = %s
+                    WHERE id = %s
+                """, (exit_time, entry_id))
+                print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}")
+
+            conn.commit()
             return True
     except Exception as e:
         print_boxed_message("Database Exit Record Error", "!")
@@ -333,6 +410,7 @@ def log_plate_exit(plate_number):
         return False
     finally:
         conn.close()
+
 
 # Initialize the database when the module is imported
 if __name__ == "__main__":

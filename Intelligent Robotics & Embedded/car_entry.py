@@ -12,7 +12,7 @@ import db_operations
 db_operations.initialize_db()
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-model = YOLO('C://Users//hp//Desktop//NE_2025//Embedded//best.pt')
+model = YOLO('C://Users//hp//Desktop//NE_2025//Embedded//Intelligent Robotics & Embedded//best.pt')
 save_dir = 'plates'
 os.makedirs(save_dir, exist_ok=True)
 def detect_arduino_port():

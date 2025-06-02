@@ -137,7 +137,8 @@ exports.Prisma.PlateLogScalarFieldEnum = {
   paymentStatus: 'paymentStatus',
   entryTimestamp: 'entryTimestamp',
   paymentTimestamp: 'paymentTimestamp',
-  exitTimestamp: 'exitTimestamp'
+  exitTimestamp: 'exitTimestamp',
+  exitStatus: 'exitStatus'
 };
 
 exports.Prisma.SortOrder = {

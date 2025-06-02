@@ -19,4 +19,15 @@ export interface IUser {
 }
 
 
+
+export interface IParkingLog {
+ id: string;
+  plateNumber: string;
+  paymentStatus: number;
+  entryTimestamp: Date;
+  paymentTimestamp: Date | null;
+  exitTimestamp: Date | null;
+  exitStatus: string | null;
+}
+
 export type SafeUser = Omit<User, "password">

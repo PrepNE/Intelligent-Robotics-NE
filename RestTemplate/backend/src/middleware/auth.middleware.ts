@@ -1,27 +1,29 @@
 import { NextFunction, Request, Response } from "express";
-import { extractPayload } from "../utils/jwt";
 import AppError from "../utils/AppError";
+import { extractPayload } from "../utils/jwt";
+import { User } from "../generated/prisma";
 
-export const isAuthenticated = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const token = req.cookies?.token;
 
-  if (!token) {
-    return next(new AppError("You're not logged in!", 401));
-  }
+interface AuthRequest extends Request {
+    user?: User
+}
 
-  try {
-    const payload = extractPayload(token);
-    if (!payload) {
-      return next(new AppError("Invalid token", 401));
+
+export const isAuthenticated = (req: Request , res: Response, next: NextFunction) => {
+    const authorization = req.headers.authorization;
+    const token = authorization?.split(" ")[1];
+
+    if(!token){
+        return new AppError("You're not logged in!", 401)
     }
 
+    const payload = extractPayload(token);
+
+    if (!payload) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    //@ts-ignore
     req.user = payload;
-    next();
-  } catch (err) {
-    return next(new AppError("Token verification failed", 401));
-  }
-};
+    next()
+}

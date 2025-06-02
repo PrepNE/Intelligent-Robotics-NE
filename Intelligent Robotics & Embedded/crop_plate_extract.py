@@ -6,7 +6,7 @@ import time
 import re
 
 # Load YOLOv8 model (update path if needed)
-model = YOLO('C://Users//hp//Downloads//windows-parking-management-system//windows-parking-management-system//best.pt')
+model = YOLO('C://Users//hp//Desktop//NE_2025//Embedded//Intelligent Robotics & Embedded//best.pt')
 
 # Create folder to save cropped plates
 save_dir = 'plates'

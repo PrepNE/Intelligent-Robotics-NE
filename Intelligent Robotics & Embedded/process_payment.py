@@ -8,7 +8,7 @@ import db_operations
 # Initialize the database
 db_operations.initialize_db()
 
-RATE_PER_MINUTE = 500  # Amount charged per minute
+RATE_PER_MINUTE = 5  # Amount charged per minute
 
 
 def detect_arduino_port():

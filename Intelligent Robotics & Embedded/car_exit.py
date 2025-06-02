@@ -90,8 +90,8 @@ while True:
 
                                 if is_payment_complete(most_common):
                                     print(f"[ACCESS GRANTED] Payment complete for {most_common}")
-                                    # Record exit time in database
-                                    db_operations.log_plate_exit(most_common)
+                                    # Record exit time in database with normal status
+                                    db_operations.log_plate_exit(most_common, "NORMAL")
                                     if arduino:
                                         arduino.write(b'1')  # Open gate
                                         print("[GATE] Opening gate (sent '1')")
@@ -100,6 +100,8 @@ while True:
                                         print("[GATE] Closing gate (sent '0')")
                                 else:
                                     print(f"[ACCESS DENIED] Payment NOT complete for {most_common}")
+                                    # Record incident in database
+                                    db_operations.log_plate_exit(most_common, "DENIED")
                                     if arduino:
                                         arduino.write(b'2')  # Trigger warning buzzer
                                         print("[ALERT] Buzzer triggered (sent '2')")

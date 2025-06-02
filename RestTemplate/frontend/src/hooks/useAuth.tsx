@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useContext, useEffect, useState } from "react";
+import { IUser } from "@/types";
+import { createContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "@/lib/axios.config";
 import { deleteCookie, getCookie, setCookie } from "@/lib/utils";
-import { IUser } from "@/types";
 import { notification } from "antd";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-interface AuthContextProvider {
+interface AuthContextType {
   user: IUser | null;
   login: (email: string, password: string) => void;
   loggingIn: boolean;
   register: (
-    user: Omit<IUser, "id"> & {
+    user: Omit<IUser, "id" | "role" | "createdAt" | "updatedAt"> & {
       password: string;
     }
   ) => void;
@@ -22,30 +23,31 @@ interface AuthContextProvider {
   initialLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextProvider | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [registering, setRegistering] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [user, setUser] = useState<IUser | null>(null);
-  const [registering, setRegistering] = useState<boolean>(false);
-  const [loggingIn, setLoggingIn] = useState<boolean>(false);
-  const [initialLoading, setInitialLoading] = useState<boolean>(true);
-  const [loggingOut, setLoggingOut] = useState<boolean>(false);
+  console.log("Here is the user: ", user);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = await getCookie("token");
-      try {
-        if (token) {
+      const token = getCookie("token");
+      console.log("Here is the token: ", token)
+      if (token) {
+        try {
           const { data } = await axios.get("/auth/me");
           setUser(data.body);
+        } catch (error) {
+          setUser(null);
+          deleteCookie("token");
         }
-      } catch (error) {
-        setUser(null);
-        deleteCookie("token");
       }
-
       setInitialLoading(false);
     };
 
@@ -56,13 +58,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoggingIn(true);
     try {
       const { data } = await axios.post("/auth/login", { email, password });
-      setUser(data.body);
-      notification.success({ message: data.message });
-      navigate("/dashboard");
+      if (data.success) {
+        setUser(data.body);
+        setCookie("token", data.token, 7);
+        notification.success({
+          message: data.message,
+        });
+        navigate("/dashboard");
+      } else {
+        notification.error({
+          message: data?.message,
+        });
+      }
     } catch (error: any) {
-      console.error("Login error: ", error);
+      console.log("Here is the erorr: ", error)
       notification.error({
-        message: error?.response?.data?.message || "Login failed",
+        message: error?.message,
       });
     } finally {
       setLoggingIn(false);
@@ -70,14 +81,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const register = async (
-    user: Omit<IUser, "id"> & {
+    user: Omit<IUser, "id" | "role"> & {
       password: string;
     }
   ) => {
-    setRegistering(true);
     try {
       const { data } = await axios.post("/auth/register", user);
-
       if (data.success) {
         notification.success({
           message: data.message,
@@ -89,45 +98,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
       }
     } catch (error: any) {
-      console.error("Error while registering: ", error?.message);
       notification.error({
         message: error?.message,
       });
+    } finally {
+      setLoggingIn(false);
     }
   };
 
   const logout = async () => {
-    setLoggingOut(true);
+    setLoggingOut(true)
     try {
-      await axios.post("/auth/logout");
       setUser(null);
-      notification.success({ message: "Logged out successfully" });
-      navigate("/login");
-    } catch (err: any) {
+      deleteCookie("token")
+      notification.success({
+        message: "Logout successfully"
+      })
+      navigate("/login")
+    } catch (error: any) {
       notification.error({
-        message: err?.response?.data?.message || "Logout failed",
+        message: error?.message,
       });
     } finally {
-      setLoggingOut(false);
+      setLoggingOut(false)
     }
-  };
+  }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        loggingIn,
-        register,
-        registering,
-        logout,
-        loggingOut,
-        initialLoading,
-      }}
-    >
+    <AuthContext.Provider value={{ user, login, loggingIn, register, registering, logout, loggingOut, initialLoading }}>
       {children}
     </AuthContext.Provider>
-  );
+  )
 };
 
 export default function useAuth() {

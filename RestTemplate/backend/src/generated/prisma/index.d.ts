@@ -2038,6 +2038,7 @@ export namespace Prisma {
     entryTimestamp: Date | null
     paymentTimestamp: Date | null
     exitTimestamp: Date | null
+    exitStatus: string | null
   }
 
   export type PlateLogMaxAggregateOutputType = {
@@ -2047,6 +2048,7 @@ export namespace Prisma {
     entryTimestamp: Date | null
     paymentTimestamp: Date | null
     exitTimestamp: Date | null
+    exitStatus: string | null
   }
 
   export type PlateLogCountAggregateOutputType = {
@@ -2056,6 +2058,7 @@ export namespace Prisma {
     entryTimestamp: number
     paymentTimestamp: number
     exitTimestamp: number
+    exitStatus: number
     _all: number
   }
 
@@ -2075,6 +2078,7 @@ export namespace Prisma {
     entryTimestamp?: true
     paymentTimestamp?: true
     exitTimestamp?: true
+    exitStatus?: true
   }
 
   export type PlateLogMaxAggregateInputType = {
@@ -2084,6 +2088,7 @@ export namespace Prisma {
     entryTimestamp?: true
     paymentTimestamp?: true
     exitTimestamp?: true
+    exitStatus?: true
   }
 
   export type PlateLogCountAggregateInputType = {
@@ -2093,6 +2098,7 @@ export namespace Prisma {
     entryTimestamp?: true
     paymentTimestamp?: true
     exitTimestamp?: true
+    exitStatus?: true
     _all?: true
   }
 
@@ -2189,6 +2195,7 @@ export namespace Prisma {
     entryTimestamp: Date
     paymentTimestamp: Date | null
     exitTimestamp: Date | null
+    exitStatus: string | null
     _count: PlateLogCountAggregateOutputType | null
     _avg: PlateLogAvgAggregateOutputType | null
     _sum: PlateLogSumAggregateOutputType | null
@@ -2217,6 +2224,7 @@ export namespace Prisma {
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
+    exitStatus?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2226,6 +2234,7 @@ export namespace Prisma {
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
+    exitStatus?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2235,6 +2244,7 @@ export namespace Prisma {
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
+    exitStatus?: boolean
   }, ExtArgs["result"]["plateLog"]>
 
   export type PlateLogSelectScalar = {
@@ -2244,9 +2254,10 @@ export namespace Prisma {
     entryTimestamp?: boolean
     paymentTimestamp?: boolean
     exitTimestamp?: boolean
+    exitStatus?: boolean
   }
 
-  export type PlateLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plateNumber" | "paymentStatus" | "entryTimestamp" | "paymentTimestamp" | "exitTimestamp", ExtArgs["result"]["plateLog"]>
+  export type PlateLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plateNumber" | "paymentStatus" | "entryTimestamp" | "paymentTimestamp" | "exitTimestamp" | "exitStatus", ExtArgs["result"]["plateLog"]>
 
   export type $PlateLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PlateLog"
@@ -2258,6 +2269,7 @@ export namespace Prisma {
       entryTimestamp: Date
       paymentTimestamp: Date | null
       exitTimestamp: Date | null
+      exitStatus: string | null
     }, ExtArgs["result"]["plateLog"]>
     composites: {}
   }
@@ -2687,6 +2699,7 @@ export namespace Prisma {
     readonly entryTimestamp: FieldRef<"PlateLog", 'DateTime'>
     readonly paymentTimestamp: FieldRef<"PlateLog", 'DateTime'>
     readonly exitTimestamp: FieldRef<"PlateLog", 'DateTime'>
+    readonly exitStatus: FieldRef<"PlateLog", 'String'>
   }
     
 
@@ -3087,7 +3100,8 @@ export namespace Prisma {
     paymentStatus: 'paymentStatus',
     entryTimestamp: 'entryTimestamp',
     paymentTimestamp: 'paymentTimestamp',
-    exitTimestamp: 'exitTimestamp'
+    exitTimestamp: 'exitTimestamp',
+    exitStatus: 'exitStatus'
   };
 
   export type PlateLogScalarFieldEnum = (typeof PlateLogScalarFieldEnum)[keyof typeof PlateLogScalarFieldEnum]
@@ -3272,6 +3286,7 @@ export namespace Prisma {
     entryTimestamp?: DateTimeFilter<"PlateLog"> | Date | string
     paymentTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
     exitTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
+    exitStatus?: StringNullableFilter<"PlateLog"> | string | null
   }
 
   export type PlateLogOrderByWithRelationInput = {
@@ -3281,6 +3296,7 @@ export namespace Prisma {
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrderInput | SortOrder
     exitTimestamp?: SortOrderInput | SortOrder
+    exitStatus?: SortOrderInput | SortOrder
   }
 
   export type PlateLogWhereUniqueInput = Prisma.AtLeast<{
@@ -3293,6 +3309,7 @@ export namespace Prisma {
     entryTimestamp?: DateTimeFilter<"PlateLog"> | Date | string
     paymentTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
     exitTimestamp?: DateTimeNullableFilter<"PlateLog"> | Date | string | null
+    exitStatus?: StringNullableFilter<"PlateLog"> | string | null
   }, "id">
 
   export type PlateLogOrderByWithAggregationInput = {
@@ -3302,6 +3319,7 @@ export namespace Prisma {
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrderInput | SortOrder
     exitTimestamp?: SortOrderInput | SortOrder
+    exitStatus?: SortOrderInput | SortOrder
     _count?: PlateLogCountOrderByAggregateInput
     _avg?: PlateLogAvgOrderByAggregateInput
     _max?: PlateLogMaxOrderByAggregateInput
@@ -3319,6 +3337,7 @@ export namespace Prisma {
     entryTimestamp?: DateTimeWithAggregatesFilter<"PlateLog"> | Date | string
     paymentTimestamp?: DateTimeNullableWithAggregatesFilter<"PlateLog"> | Date | string | null
     exitTimestamp?: DateTimeNullableWithAggregatesFilter<"PlateLog"> | Date | string | null
+    exitStatus?: StringNullableWithAggregatesFilter<"PlateLog"> | string | null
   }
 
   export type UserCreateInput = {
@@ -3405,6 +3424,7 @@ export namespace Prisma {
     entryTimestamp: Date | string
     paymentTimestamp?: Date | string | null
     exitTimestamp?: Date | string | null
+    exitStatus?: string | null
   }
 
   export type PlateLogUncheckedCreateInput = {
@@ -3414,6 +3434,7 @@ export namespace Prisma {
     entryTimestamp: Date | string
     paymentTimestamp?: Date | string | null
     exitTimestamp?: Date | string | null
+    exitStatus?: string | null
   }
 
   export type PlateLogUpdateInput = {
@@ -3423,6 +3444,7 @@ export namespace Prisma {
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PlateLogUncheckedUpdateInput = {
@@ -3432,6 +3454,7 @@ export namespace Prisma {
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PlateLogCreateManyInput = {
@@ -3441,6 +3464,7 @@ export namespace Prisma {
     entryTimestamp: Date | string
     paymentTimestamp?: Date | string | null
     exitTimestamp?: Date | string | null
+    exitStatus?: string | null
   }
 
   export type PlateLogUpdateManyMutationInput = {
@@ -3450,6 +3474,7 @@ export namespace Prisma {
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PlateLogUncheckedUpdateManyInput = {
@@ -3459,6 +3484,7 @@ export namespace Prisma {
     entryTimestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     exitTimestamp?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exitStatus?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3591,6 +3617,21 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -3603,6 +3644,7 @@ export namespace Prisma {
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrder
     exitTimestamp?: SortOrder
+    exitStatus?: SortOrder
   }
 
   export type PlateLogAvgOrderByAggregateInput = {
@@ -3616,6 +3658,7 @@ export namespace Prisma {
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrder
     exitTimestamp?: SortOrder
+    exitStatus?: SortOrder
   }
 
   export type PlateLogMinOrderByAggregateInput = {
@@ -3625,6 +3668,7 @@ export namespace Prisma {
     entryTimestamp?: SortOrder
     paymentTimestamp?: SortOrder
     exitTimestamp?: SortOrder
+    exitStatus?: SortOrder
   }
 
   export type PlateLogSumOrderByAggregateInput = {
@@ -3661,6 +3705,24 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -3683,6 +3745,10 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3780,6 +3846,20 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -3830,6 +3910,23 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
 

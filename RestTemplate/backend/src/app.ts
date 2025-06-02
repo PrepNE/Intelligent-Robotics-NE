@@ -9,6 +9,7 @@ import MyJson from './swagger/swagger.json'
 import { errorHandler } from "./middleware/error.middleware";
 import AppError from "./utils/AppError";
 import docRoutes from "./routes/docs.routes";
+import plateLogRoutes from "./routes/platelogs.routes";
 
 const app: Application = express();
 
@@ -31,6 +32,7 @@ app.use(
 );
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/plate-logs", plateLogRoutes)
 app.use("/api/v1/docs",docRoutes)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(MyJson))
