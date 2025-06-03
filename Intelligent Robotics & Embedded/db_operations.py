@@ -392,29 +392,19 @@ def log_plate_exit(plate_number, exit_status=None):
                 cursor.execute("""
                     SELECT id
                     FROM plates_log
-                    WHERE plate_number = %s AND exit_timestamp IS NULL
+                    WHERE plate_number = %s AND exit_timestamp IS NULL AND exit_status IS NULL
                     ORDER BY entry_timestamp DESC
                     LIMIT 1
                 """, (plate_number,))
             else:
-                # Check if there's already an exit record with the specified status for this plate
-                cursor.execute("""
-                    SELECT id
-                    FROM plates_log
-                    WHERE plate_number = %s AND exit_timestamp IS NOT NULL AND exit_status = %s
-                    ORDER BY exit_timestamp DESC
-                    LIMIT 1
-                """, (plate_number, exit_status))
-
-                if cursor.fetchone() is not None:
-                    print(f"[SKIP] Plate {plate_number} already has a NORMAL exit record. Skipping update.")
-                    return True
+                # We'll no longer skip if there's already an exit record with the specified status
+                # This ensures that each entry gets its own exit record
 
                 # For normal exits, get the most recent paid entry without an exit timestamp
                 cursor.execute("""
                     SELECT id, amount_charged
                     FROM plates_log
-                    WHERE plate_number = %s AND payment_status = 1 AND exit_timestamp IS NULL AND exit_status IS NULL
+                    WHERE plate_number = %s AND payment_status = 1 AND exit_timestamp IS NULL
                     ORDER BY payment_timestamp DESC
                     LIMIT 1
                 """, (plate_number,))
@@ -432,13 +422,20 @@ def log_plate_exit(plate_number, exit_status=None):
 
             # Update the exit timestamp and status
             if exit_status == "DENIED":
-                # For denied exits, only update the exit_status without setting exit_timestamp
+                # For denied exits, update both exit_status and exit_timestamp
                 cursor.execute("""
                     UPDATE plates_log
-                    SET exit_status = %s
+                    SET exit_status = %s, exit_timestamp = %s
                     WHERE id = %s
-                """, (exit_status, entry_id))
-                print(f"[EXIT] Recorded incident for plate {plate_number} with status: {exit_status}")
+                """, (exit_status, exit_time, entry_id))
+
+                # Check if the update was successful
+                if cursor.rowcount > 0:
+                    print(f"[EXIT] Recorded incident for plate {plate_number} with status: {exit_status} and exit time: {exit_time}")
+                    conn.commit()  # Commit changes immediately after successful update
+                else:
+                    print(f"[ERROR] Failed to update exit status and time for plate {plate_number}")
+                    return False
             elif exit_status:
                 # For normal exits with status, update both exit_timestamp and exit_status
                 cursor.execute("""
@@ -446,10 +443,17 @@ def log_plate_exit(plate_number, exit_status=None):
                     SET exit_timestamp = %s, exit_status = %s
                     WHERE id = %s
                 """, (exit_time, exit_status, entry_id))
-                if amount_charged is not None:
-                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}, amount charged: {amount_charged}")
+
+                # Check if the update was successful
+                if cursor.rowcount > 0:
+                    if amount_charged is not None:
+                        print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}, amount charged: {amount_charged}")
+                    else:
+                        print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}")
+                    conn.commit()  # Commit changes immediately after successful update
                 else:
-                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number} with status: {exit_status}")
+                    print(f"[ERROR] Failed to update exit time and status for plate {plate_number}")
+                    return False
             else:
                 # For exits without status, just update exit_timestamp
                 cursor.execute("""
@@ -457,12 +461,18 @@ def log_plate_exit(plate_number, exit_status=None):
                     SET exit_timestamp = %s
                     WHERE id = %s
                 """, (exit_time, entry_id))
-                if amount_charged is not None:
-                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}, amount charged: {amount_charged}")
-                else:
-                    print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}")
 
-            conn.commit()
+                # Check if the update was successful
+                if cursor.rowcount > 0:
+                    if amount_charged is not None:
+                        print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}, amount charged: {amount_charged}")
+                    else:
+                        print(f"[EXIT] Recorded exit time {exit_time} for plate {plate_number}")
+                    conn.commit()  # Commit changes immediately after successful update
+                else:
+                    print(f"[ERROR] Failed to update exit time for plate {plate_number}")
+                    return False
+
             return True
     except Exception as e:
         print_boxed_message("Database Exit Record Error", "!")
