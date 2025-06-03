@@ -397,14 +397,14 @@ def log_plate_exit(plate_number, exit_status=None):
                     LIMIT 1
                 """, (plate_number,))
             else:
-                # Check if there's already a NORMAL exit record for this plate
+                # Check if there's already an exit record with the specified status for this plate
                 cursor.execute("""
                     SELECT id
                     FROM plates_log
-                    WHERE plate_number = %s AND exit_timestamp IS NOT NULL AND exit_status = 'NORMAL'
+                    WHERE plate_number = %s AND exit_timestamp IS NOT NULL AND exit_status = %s
                     ORDER BY exit_timestamp DESC
                     LIMIT 1
-                """, (plate_number,))
+                """, (plate_number, exit_status))
 
                 if cursor.fetchone() is not None:
                     print(f"[SKIP] Plate {plate_number} already has a NORMAL exit record. Skipping update.")
@@ -414,7 +414,7 @@ def log_plate_exit(plate_number, exit_status=None):
                 cursor.execute("""
                     SELECT id, amount_charged
                     FROM plates_log
-                    WHERE plate_number = %s AND payment_status = 1 AND exit_timestamp IS NULL
+                    WHERE plate_number = %s AND payment_status = 1 AND exit_timestamp IS NULL AND exit_status IS NULL
                     ORDER BY payment_timestamp DESC
                     LIMIT 1
                 """, (plate_number,))
