@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon  src/server.ts",
+    "dev": "node api.js && nodemon  src/server.ts",
     "test": "jest --coverage --runInBand --detectOpenHandles --forceExit",
-    "build": "tsc",
-    "start": "node dist/src/server.js",
+    "build": "node api.js && tsc",
+    "start": "node api.js && node dist/src/server.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "prisma:seed": "ts-node src/utils/seed.ts"
   },
-   "prisma": {
+  "prisma": {
     "seed": "ts-node src/utils/seed.ts"
   },
   "keywords": [],
