@@ -1,3 +1,4 @@
+import utils.session
 import psycopg2
 from psycopg2 import sql
 import time
